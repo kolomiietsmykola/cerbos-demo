@@ -1,0 +1,27 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: "default"
+  importDerivedRoles:
+    - common_roles
+  resource: "product:object"
+  rules:
+    - actions: ['*']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - owner
+
+    - actions: ['edit']
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - admin
+      condition:
+        match:
+          expr: request.resource.attr.flagged == true
+
+    - actions: ['edit']
+      effect: EFFECT_DENY
+      derivedRoles:
+        - owner
+      condition:
+        match:
+          expr: request.resource.attr.flagged == true

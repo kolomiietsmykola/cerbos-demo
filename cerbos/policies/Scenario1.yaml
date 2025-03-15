@@ -1,0 +1,17 @@
+apiVersion: "api.cerbos.dev/v1"
+resourcePolicy:
+  version: "default"
+  resource: "product:object"
+  rules:
+    - actions: ["view:public"]
+      effect: EFFECT_ALLOW
+      condition:
+        match:
+          expr: request.resource.attr.public == true
+
+    - actions: ["view:private"]
+      effect: EFFECT_ALLOW
+      roles: ["seller"]
+      condition:
+        match:
+          expr: request.resource.attr.owner == request.principal.id
